@@ -16,6 +16,8 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
+
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
