@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Brew & Bites Café</title>
 
 @vite(['resources/css/app.css','resources/js/app.js'])
+
 
 <style>
 
@@ -17,108 +20,230 @@ body{
     flex-direction:column;
 }
 
+
+
 .customer-navbar{
+
     background:#6f4e37;
-    padding:18px 0;
+
+    padding:16px 0;
+
     box-shadow:0 5px 20px rgba(0,0,0,.15);
-    position:relative;
+
+    position:sticky;
+
+    top:0;
+
     z-index:1000;
+
 }
+
+
+
 
 .nav-container{
+
     width:90%;
+
     max-width:1200px;
+
     margin:auto;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
 }
+
+
 
 .brand{
+
     font-size:28px;
+
     font-weight:800;
+
     color:white;
+
     text-decoration:none;
+
 }
 
+
+
 .nav-links{
+
     display:flex;
+
     align-items:center;
+
     gap:10px;
+
 }
+
+
 
 .nav-item-link,
 .nav-item-link:visited{
+
     color:white;
+
     text-decoration:none;
+
     padding:10px 18px;
+
     border-radius:25px;
+
     font-weight:600;
+
     transition:.2s;
+
 }
+
+
 
 .nav-item-link:hover,
 .nav-item-link.active{
+
     background:white;
+
     color:#6f4e37;
+
 }
+
+
+
 
 .logout-btn{
+
     background:transparent;
+
     border:1px solid white;
+
     color:white;
+
     padding:10px 20px;
+
     border-radius:25px;
+
     font-weight:600;
+
     cursor:pointer;
+
 }
+
+
 
 .logout-btn:hover{
+
     background:white;
+
     color:#6f4e37;
+
 }
+
+
 
 .register-btn{
+
     background:white;
+
     color:#6f4e37!important;
+
 }
+
+
 
 .menu-toggle{
+
     display:none;
-    background:none;
+
+    background:white;
+
     border:none;
-    color:white;
-    font-size:32px;
+
+    color:#6f4e37;
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    font-size:25px;
+
     cursor:pointer;
+
 }
+
+
 
 .customer-content{
+
     flex:1;
+
 }
 
+
+
 .customer-footer{
+
     background:#4b2e1f;
+
     color:white;
+
     text-align:center;
+
     padding:35px;
+
     margin-top:50px;
+
 }
+
+
+
 
 
 @media(max-width:768px){
 
-.nav-container{
-    width:90%;
+
+
+.customer-navbar{
+
+    padding:12px 0;
+
 }
 
-.brand{
-    font-size:22px;
+
+
+.nav-container{
+
+    width:92%;
+
 }
+
+
+
+.brand{
+
+    font-size:20px;
+
+}
+
 
 
 .menu-toggle{
-    display:block;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
 }
+
 
 
 .nav-links{
@@ -127,7 +252,8 @@ body{
 
     position:absolute;
 
-    top:75px;
+    top:66px;
+
     left:0;
 
     width:100%;
@@ -138,119 +264,199 @@ body{
 
     flex-direction:column;
 
-    gap:15px;
+    gap:12px;
 
     box-shadow:0 10px 20px rgba(0,0,0,.2);
 
 }
 
 
+
 .nav-links.show{
+
     display:flex;
+
 }
+
 
 
 .nav-item-link,
 .logout-btn{
 
     width:100%;
+
     text-align:center;
+
     box-sizing:border-box;
 
 }
+
+
+
+.customer-footer{
+
+    padding:25px 15px;
+
+}
+
+
 
 }
 
 </style>
 
+
 </head>
+
 
 
 <body>
 
 
+
 <nav class="customer-navbar">
+
 
 <div class="nav-container">
 
 
-<a href="/" class="brand">
+
+<a href="/" 
+class="brand">
+
 ☕ Brew & Bites
+
 </a>
 
 
-<button class="menu-toggle" onclick="toggleMenu()">
+
+
+<button class="menu-toggle"
+onclick="toggleMenu()">
+
 ☰
+
 </button>
 
 
 
-<div class="nav-links" id="navLinks">
 
 
-<a href="/" class="nav-item-link {{request()->is('/')?'active':''}}">
+<div class="nav-links"
+id="navLinks">
+
+
+
+<a href="/"
+class="nav-item-link {{request()->is('/')?'active':''}}"
+onclick="closeMenu()">
+
 Home
+
 </a>
 
 
-<a href="/products" class="nav-item-link {{request()->is('products*')?'active':''}}">
+
+<a href="/products"
+class="nav-item-link {{request()->is('products*')?'active':''}}"
+onclick="closeMenu()">
+
 Menu
+
 </a>
+
+
 
 
 @if(Auth::check())
 
 
-<a href="/cart" class="nav-item-link {{request()->is('cart')?'active':''}}">
+
+<a href="/cart"
+class="nav-item-link {{request()->is('cart')?'active':''}}"
+onclick="closeMenu()">
+
 🛒 Cart
+
 </a>
 
 
-<a href="/orders" class="nav-item-link {{request()->is('orders*')?'active':''}}">
+
+<a href="/orders"
+class="nav-item-link {{request()->is('orders*')?'active':''}}"
+onclick="closeMenu()">
+
 📦 Orders
+
 </a>
 
 
-<a href="/profile" class="nav-item-link {{request()->is('profile')?'active':''}}">
+
+<a href="/profile"
+class="nav-item-link {{request()->is('profile')?'active':''}}"
+onclick="closeMenu()">
+
 👤 Profile
+
 </a>
 
 
 
-<form action="/logout" method="POST">
+
+<form action="/logout"
+method="POST">
 
 @csrf
 
+
 <button class="logout-btn">
+
 Logout
+
 </button>
 
+
 </form>
+
 
 
 
 @else
 
 
-<a href="/login" class="nav-item-link login-btn">
+
+<a href="/login"
+class="nav-item-link">
+
 Login
+
 </a>
 
 
-<a href="/register" class="nav-item-link register-btn">
+
+<a href="/register"
+class="nav-item-link register-btn">
+
 Register
+
 </a>
+
 
 
 @endif
 
 
+
 </div>
 
 
+
 </div>
+
 
 </nav>
+
+
 
 
 
@@ -262,15 +468,30 @@ Register
 
 
 
+
+
 <footer class="customer-footer">
 
-<h3>☕ Brew & Bites Café</h3>
 
-<p>Fresh coffee. Fresh pastries. Made with love.</p>
+<h3>
+☕ Brew & Bites Café
+</h3>
 
-<p>© 2026 Brew & Bites Café</p>
+
+<p>
+Fresh coffee. Fresh pastries. Made with love.
+</p>
+
+
+<p>
+© 2026 Brew & Bites Café
+</p>
+
+
 
 </footer>
+
+
 
 
 
@@ -278,13 +499,26 @@ Register
 
 function toggleMenu(){
 
-document.getElementById('navLinks')
+document
+.getElementById('navLinks')
 .classList.toggle('show');
+
+}
+
+
+
+function closeMenu(){
+
+document
+.getElementById('navLinks')
+.classList.remove('show');
 
 }
 
 </script>
 
 
+
 </body>
+
 </html>
