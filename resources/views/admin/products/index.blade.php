@@ -5,21 +5,19 @@
 <div class="container-fluid">
 
 
-<div class="product-header mb-4">
-
+<div class="d-flex justify-content-between align-items-center mb-4">
 
 <div>
 
 <h1 class="fw-bold">
-Product Management
+☕ Product Management
 </h1>
 
-<p class="text-muted mb-0">
+<p class="text-muted">
 Manage your café products and inventory.
 </p>
 
 </div>
-
 
 
 <a href="/admin/products/create"
@@ -35,27 +33,34 @@ class="add-btn">
 
 
 
+
 <div class="filter-box mb-4">
+
+
+<form method="GET">
 
 
 <div class="row g-3">
 
 
-<div class="col-md-5">
+<div class="col-lg-5">
 
 <input type="text"
-id="searchProduct"
+name="search"
 class="form-control"
-placeholder="Search product...">
+placeholder="Search product..."
+value="{{request('search')}}">
 
 </div>
 
 
 
-<div class="col-md-4">
+<div class="col-lg-4">
 
-<select id="categoryFilter"
-class="form-select">
+<select name="category"
+class="form-select"
+onchange="this.form.submit()">
+
 
 <option value="">
 All Categories
@@ -64,8 +69,10 @@ All Categories
 
 @foreach($categories as $category)
 
-<option value="{{$category->name}}">
+<option value="{{$category->id}}"
+{{request('category')==$category->id?'selected':''}}>
 
+{{$category->icon}}
 {{$category->name}}
 
 </option>
@@ -75,14 +82,18 @@ All Categories
 
 </select>
 
+
 </div>
 
 
 
-<div class="col-md-3">
 
-<select id="sortProduct"
-class="form-select">
+<div class="col-lg-3">
+
+
+<select name="sort"
+class="form-select"
+onchange="this.form.submit()">
 
 
 <option value="">
@@ -90,12 +101,12 @@ Latest
 </option>
 
 
-<option value="low">
+<option value="price_low">
 Price Low - High
 </option>
 
 
-<option value="high">
+<option value="price_high">
 Price High - Low
 </option>
 
@@ -107,8 +118,6 @@ Stock
 
 </select>
 
-</div>
-
 
 </div>
 
@@ -116,25 +125,24 @@ Stock
 </div>
 
 
+</form>
+
+
+</div>
 
 
 
-<div class="row g-4"
-id="productList">
+
+
+
+
+<div class="row">
 
 
 @foreach($products as $product)
 
 
-<div class="col-lg-4 col-md-6 product-item"
-
-data-name="{{$product->name}}"
-
-data-category="{{$product->category->name}}"
-
-data-price="{{$product->price}}"
-
-data-stock="{{$product->stock}}">
+<div class="col-lg-4 col-md-6 mb-4">
 
 
 <div class="product-card">
@@ -148,7 +156,7 @@ class="product-image">
 @else
 
 <div class="product-placeholder">
-No Image
+☕
 </div>
 
 @endif
@@ -156,21 +164,22 @@ No Image
 
 
 
-<div class="product-body">
-
+<div class="p-3">
 
 
 <span class="category-badge">
 
+{{$product->category->icon}}
 {{$product->category->name}}
 
 </span>
 
 
 
+<h3 class="fw-bold mt-3">
 
-<h3>
 {{$product->name}}
+
 </h3>
 
 
@@ -183,32 +192,15 @@ No Image
 
 
 
-
-@if($product->stock > 10)
-
-<p class="stock available">
-Stock: {{$product->stock}}
+<p>
+Stock:
+<b>{{$product->stock}}</b>
 </p>
 
-@elseif($product->stock > 0)
-
-<p class="stock low">
-Low Stock: {{$product->stock}}
-</p>
-
-@else
-
-<p class="stock out">
-Out of Stock
-</p>
-
-@endif
 
 
 
-
-
-<div class="actions">
+<div class="d-flex gap-2">
 
 
 <a href="/admin/products/{{$product->id}}/edit"
@@ -220,15 +212,18 @@ Edit
 
 
 
+
 <form action="/admin/products/{{$product->id}}"
 method="POST">
 
 @csrf
+
 @method('DELETE')
 
 
-<button class="delete-btn"
-onclick="return confirm('Delete this product?')">
+<button type="button"
+class="delete-btn"
+onclick="openDeleteModal(this.form)">
 
 Delete
 
@@ -238,8 +233,8 @@ Delete
 </form>
 
 
-</div>
 
+</div>
 
 
 </div>
@@ -263,21 +258,110 @@ Delete
 
 
 
-<style>
+
+<div class="modal-bg"
+id="deleteModal">
 
 
-.product-header{
+<div class="delete-modal">
 
-display:flex;
 
-justify-content:space-between;
+<h3>
+Delete Product?
+</h3>
 
-align-items:center;
 
-gap:20px;
+<p>
+Are you sure you want to remove this product?
+</p>
+
+
+
+<div class="modal-actions">
+
+
+<button onclick="closeDeleteModal()"
+class="cancel-btn">
+
+Cancel
+
+</button>
+
+
+<button onclick="confirmDelete()"
+class="confirm-btn">
+
+Delete
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+let deleteForm=null;
+
+
+
+function openDeleteModal(form){
+
+deleteForm=form;
+
+document
+.getElementById('deleteModal')
+.classList.add('show');
 
 }
 
+
+
+function closeDeleteModal(){
+
+deleteForm=null;
+
+document
+.getElementById('deleteModal')
+.classList.remove('show');
+
+}
+
+
+
+function confirmDelete(){
+
+if(deleteForm){
+
+deleteForm.submit();
+
+}
+
+}
+
+
+
+</script>
+
+
+
+
+
+
+
+<style>
 
 
 .add-btn{
@@ -286,13 +370,13 @@ background:#1f2937;
 
 color:white;
 
-padding:12px 25px;
+padding:12px 22px;
 
-border-radius:12px;
-
-font-weight:700;
+border-radius:15px;
 
 text-decoration:none;
+
+font-weight:700;
 
 }
 
@@ -316,34 +400,23 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 
 background:white;
 
-border-radius:22px;
+border-radius:25px;
 
 overflow:hidden;
 
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+box-shadow:0 10px 25px rgba(0,0,0,.08);
 
 height:100%;
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-
-
-.product-image,
-.product-placeholder{
-
-width:100%;
-
-height:260px;
 
 }
 
 
 
 .product-image{
+
+width:100%;
+
+height:260px;
 
 object-fit:cover;
 
@@ -353,7 +426,7 @@ object-fit:cover;
 
 .product-placeholder{
 
-background:#f3e5d0;
+height:260px;
 
 display:flex;
 
@@ -361,23 +434,9 @@ align-items:center;
 
 justify-content:center;
 
-font-size:35px;
+font-size:80px;
 
-color:#6f4e37;
-
-}
-
-
-
-.product-body{
-
-padding:22px;
-
-display:flex;
-
-flex-direction:column;
-
-flex:1;
+background:#f3e5d0;
 
 }
 
@@ -387,29 +446,11 @@ flex:1;
 
 background:#f3e5d0;
 
-color:#6f4e37;
-
-padding:6px 14px;
+padding:6px 15px;
 
 border-radius:20px;
 
-font-size:14px;
-
 font-weight:700;
-
-width:max-content;
-
-}
-
-
-
-.product-body h3{
-
-font-size:22px;
-
-font-weight:800;
-
-margin-top:15px;
 
 }
 
@@ -417,74 +458,27 @@ margin-top:15px;
 
 .price{
 
-font-size:22px;
-
-font-weight:700;
+font-weight:800;
 
 }
 
-
-
-.stock{
-
-font-weight:600;
-
-}
-
-
-
-.available{
-
-color:#15803d;
-
-}
-
-
-
-.low{
-
-color:#ca8a04;
-
-}
-
-
-
-.out{
-
-color:#dc2626;
-
-}
-
-
-
-.actions{
-
-display:flex;
-
-gap:10px;
-
-margin-top:auto;
-
-padding-top:15px;
-
-}
 
 
 
 .edit-btn,
 .delete-btn{
 
-padding:10px 22px;
+border:none;
+
+padding:10px 18px;
 
 border-radius:12px;
 
 font-weight:700;
 
-border:none;
+text-decoration:none;
 
 cursor:pointer;
-
-text-decoration:none;
 
 }
 
@@ -492,9 +486,9 @@ text-decoration:none;
 
 .edit-btn{
 
-background:#fbbf24;
+background:#ffc107;
 
-color:#1f2937;
+color:#222;
 
 }
 
@@ -511,161 +505,123 @@ color:white;
 
 
 
-@media(max-width:768px){
 
+.modal-bg{
 
-.product-header{
+display:none;
 
-flex-direction:column;
+position:fixed;
 
-align-items:flex-start;
+inset:0;
+
+background:rgba(0,0,0,.45);
+
+align-items:center;
+
+justify-content:center;
+
+z-index:9999;
 
 }
 
 
 
-.add-btn{
+.modal-bg.show{
 
-width:100%;
+display:flex;
+
+}
+
+
+
+.delete-modal{
+
+background:white;
+
+width:90%;
+
+max-width:400px;
+
+padding:30px;
+
+border-radius:25px;
 
 text-align:center;
 
+box-shadow:0 15px 40px rgba(0,0,0,.2);
+
 }
 
 
 
-.product-image,
-.product-placeholder{
+.delete-modal h3{
+
+font-weight:800;
+
+color:#4b2e1f;
+
+}
+
+
+
+.modal-actions{
+
+display:flex;
+
+gap:15px;
+
+justify-content:center;
+
+margin-top:25px;
+
+}
+
+
+
+.cancel-btn,
+.confirm-btn{
+
+padding:12px 25px;
+
+border:none;
+
+border-radius:20px;
+
+font-weight:700;
+
+}
+
+
+
+.cancel-btn{
+
+background:#eee;
+
+}
+
+
+
+.confirm-btn{
+
+background:#dc3545;
+
+color:white;
+
+}
+
+
+
+@media(max-width:768px){
+
+.product-image{
 
 height:220px;
 
 }
 
-
 }
 
 </style>
-
-
-
-
-
-<script>
-
-
-const search=document.getElementById('searchProduct');
-
-const category=document.getElementById('categoryFilter');
-
-const sort=document.getElementById('sortProduct');
-
-const items=document.querySelectorAll('.product-item');
-
-
-
-function filterProducts(){
-
-
-let text=search.value.toLowerCase();
-
-let cat=category.value.toLowerCase();
-
-
-
-let list=[...items];
-
-
-
-list.forEach(item=>{
-
-
-let name=item.dataset.name.toLowerCase();
-
-let itemCat=item.dataset.category.toLowerCase();
-
-
-
-item.style.display=
-
-name.includes(text)
-
-&&
-
-(!cat || itemCat==cat)
-
-?
-
-"block"
-
-:
-
-"none";
-
-
-});
-
-
-
-if(sort.value){
-
-
-list.sort((a,b)=>{
-
-
-let priceA=parseFloat(a.dataset.price);
-
-let priceB=parseFloat(b.dataset.price);
-
-
-let stockA=parseInt(a.dataset.stock);
-
-let stockB=parseInt(b.dataset.stock);
-
-
-
-if(sort.value=="low")
-
-return priceA-priceB;
-
-
-
-if(sort.value=="high")
-
-return priceB-priceA;
-
-
-
-if(sort.value=="stock")
-
-return stockA-stockB;
-
-
-
-});
-
-
-
-let parent=document.getElementById('productList');
-
-
-list.forEach(item=>parent.appendChild(item));
-
-
-}
-
-
-}
-
-
-
-search.addEventListener('input',filterProducts);
-
-category.addEventListener('change',filterProducts);
-
-sort.addEventListener('change',filterProducts);
-
-
-</script>
 
 
 @endsection
