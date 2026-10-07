@@ -27,8 +27,9 @@ Back to Orders
 
 </a>
 
-
 </div>
+
+
 
 
 
@@ -53,6 +54,7 @@ Customer
 
 
 
+
 <h3 class="fw-bold mt-4">
 Order Date
 </h3>
@@ -63,36 +65,64 @@ Order Date
 
 
 
+
+
 <h3 class="fw-bold mt-4">
 Status
 </h3>
 
 
-@if($order->status == 'Pending')
 
-<span class="badge bg-warning text-dark fs-6">
+<form action="/admin/orders/{{$order->id}}"
+method="POST">
+
+@csrf
+@method('PUT')
+
+
+
+<select name="status"
+class="form-select mb-3">
+
+
+<option value="Pending"
+{{$order->status=='Pending'?'selected':''}}>
 Pending
-</span>
+</option>
 
-@elseif($order->status == 'Preparing')
 
-<span class="badge bg-primary fs-6">
+<option value="Preparing"
+{{$order->status=='Preparing'?'selected':''}}>
 Preparing
-</span>
+</option>
 
-@elseif($order->status == 'Completed')
 
-<span class="badge bg-success fs-6">
+<option value="Completed"
+{{$order->status=='Completed'?'selected':''}}>
 Completed
-</span>
+</option>
 
-@else
 
-<span class="badge bg-danger fs-6">
+<option value="Cancelled"
+{{$order->status=='Cancelled'?'selected':''}}>
 Cancelled
-</span>
+</option>
 
-@endif
+
+</select>
+
+
+
+<button class="btn update-btn w-100">
+
+Update Status
+
+</button>
+
+
+
+</form>
+
 
 
 
@@ -102,6 +132,8 @@ Cancelled
 
 
 </div>
+
+
 
 
 
@@ -121,6 +153,7 @@ Order Items
 
 
 
+
 @foreach($order->items as $item)
 
 
@@ -132,7 +165,7 @@ Order Items
 
 <h5 class="fw-bold mb-1">
 
-{{ $item->product->name }}
+{{$item->product->name}}
 
 </h5>
 
@@ -140,7 +173,7 @@ Order Items
 <p class="text-muted mb-0">
 
 Quantity:
-{{ $item->quantity }}
+{{$item->quantity}}
 
 </p>
 
@@ -149,21 +182,24 @@ Quantity:
 
 
 
+
 <div class="text-end">
 
 
 <p class="mb-1">
 
-₱{{ number_format($item->price,2) }}
+₱{{number_format($item->price,2)}}
 
 </p>
 
 
+
 <strong>
 
-₱{{ number_format($item->price * $item->quantity,2) }}
+₱{{number_format($item->price*$item->quantity,2)}}
 
 </strong>
+
 
 
 </div>
@@ -179,17 +215,17 @@ Quantity:
 
 
 
-<div class="text-end mt-4">
 
+
+<div class="text-end mt-4">
 
 <h3 class="fw-bold">
 
 Total:
-₱{{ number_format($order->total_amount,2) }}
+₱{{number_format($order->total_amount,2)}}
 
 </h3>
 
-
 </div>
 
 
@@ -207,6 +243,52 @@ Total:
 
 
 </div>
+
+
+
+
+
+<style>
+
+.update-btn{
+
+background:#6f4e37;
+
+color:white;
+
+border:none;
+
+padding:12px;
+
+border-radius:15px;
+
+font-weight:700;
+
+}
+
+
+
+.update-btn:hover{
+
+background:#4b2e1f;
+
+color:white;
+
+}
+
+
+
+.form-select{
+
+border-radius:12px;
+
+padding:12px;
+
+}
+
+
+
+</style>
 
 
 @endsection
