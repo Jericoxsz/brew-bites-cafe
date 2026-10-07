@@ -191,7 +191,7 @@ Route::post('/password',[ProfileController::class,'password']);
 });
 
 Route::get('/make-admin', function(){
-    $user=\App\Models\User::where('email','ekko@gmail.com')->first();
+    $user=\App\Models\User::where('email','adminj@brewnbites.com')->first();
 
     if($user){
         $user->role='admin';
