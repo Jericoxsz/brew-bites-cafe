@@ -15,124 +15,147 @@ class ProductController extends Controller
         $categories = Category::all();
 
         $products = Product::with('category')
-            ->when($request->search, function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
-            })
-            ->when($request->category, function ($query) use ($request) {
-                $query->where('category_id', $request->category);
-            })
-            ->when($request->sort == 'price_low', function ($query) {
-                $query->orderBy('price', 'asc');
-            })
-            ->when($request->sort == 'price_high', function ($query) {
-                $query->orderBy('price', 'desc');
-            })
-            ->when($request->sort == 'stock', function ($query) {
-                $query->orderBy('stock', 'asc');
-            })
-            ->when(!$request->sort, function ($query) {
-                $query->latest();
-            })
+            ->when($request->search, fn($q)=>$q->where('name','like','%'.$request->search.'%'))
+            ->when($request->category, fn($q)=>$q->where('category_id',$request->category))
+            ->when($request->sort=='price_low', fn($q)=>$q->orderBy('price','asc'))
+            ->when($request->sort=='price_high', fn($q)=>$q->orderBy('price','desc'))
+            ->when($request->sort=='stock', fn($q)=>$q->orderBy('stock','asc'))
+            ->when(!$request->sort, fn($q)=>$q->latest())
             ->get();
 
-        return view('admin.products.index', compact(
-            'products',
-            'categories'
-        ));
+        return view('admin.products.index',compact('products','categories'));
     }
+
 
     public function create()
     {
-        $categories = Category::all();
+        $categories=Category::all();
 
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create',compact('categories'));
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'category_id'=>'required|exists:categories,id',
+            'name'=>'required|string|max:255',
+            'price'=>'required|numeric|min:0',
+            'stock'=>'required|integer|min:0',
         ]);
 
-        $image = null;
 
-        if ($request->cropped_image) {
+        $image=null;
 
-            $imageData = explode(',', $request->cropped_image);
 
-            $image = 'products/'.uniqid().'.jpg';
+        if($request->cropped_image){
 
-            Storage::disk('public')->put(
-                $image,
-                base64_decode($imageData[1])
-            );
+            $imageData=explode(',',$request->cropped_image);
+
+            if(isset($imageData[1])){
+
+                $image='products/'.uniqid().'.jpg';
+
+                Storage::disk('public')->put(
+                    $image,
+                    base64_decode($imageData[1])
+                );
+            }
         }
 
+
         Product::create([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description ?? '',
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'image' => $image,
+            'category_id'=>$request->category_id,
+            'name'=>$request->name,
+            'description'=>$request->description ?? '',
+            'price'=>$request->price,
+            'stock'=>$request->stock,
+            'image'=>$image,
         ]);
 
-        return redirect('/admin/products');
+
+        return redirect('/admin/products')
+            ->with('success','Product added successfully');
     }
+
+
 
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        $categories=Category::all();
 
-        return view('admin.products.edit', compact(
+        return view('admin.products.edit',compact(
             'product',
             'categories'
         ));
     }
 
+
+
     public function update(Request $request, Product $product)
     {
-        $image = $product->image;
 
-        if ($request->cropped_image) {
+        $request->validate([
+            'category_id'=>'required|exists:categories,id',
+            'name'=>'required|string|max:255',
+            'price'=>'required|numeric|min:0',
+            'stock'=>'required|integer|min:0',
+        ]);
 
-            if ($product->image) {
+
+        $image=$product->image;
+
+
+        if($request->cropped_image){
+
+            if($product->image){
                 Storage::disk('public')->delete($product->image);
             }
 
-            $imageData = explode(',', $request->cropped_image);
 
-            $image = 'products/'.uniqid().'.jpg';
+            $imageData=explode(',',$request->cropped_image);
 
-            Storage::disk('public')->put(
-                $image,
-                base64_decode($imageData[1])
-            );
+
+            if(isset($imageData[1])){
+
+                $image='products/'.uniqid().'.jpg';
+
+                Storage::disk('public')->put(
+                    $image,
+                    base64_decode($imageData[1])
+                );
+            }
         }
 
+
         $product->update([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description ?? '',
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'image' => $image,
+            'category_id'=>$request->category_id,
+            'name'=>$request->name,
+            'description'=>$request->description ?? '',
+            'price'=>$request->price,
+            'stock'=>$request->stock,
+            'image'=>$image,
         ]);
 
-        return redirect('/admin/products');
+
+        return redirect('/admin/products')
+            ->with('success','Product updated successfully');
     }
+
+
 
     public function destroy(Product $product)
     {
-        if ($product->image) {
+
+        if($product->image){
             Storage::disk('public')->delete($product->image);
         }
 
+
         $product->delete();
 
-        return redirect('/admin/products');
+
+        return redirect('/admin/products')
+            ->with('success','Product deleted successfully');
     }
 }

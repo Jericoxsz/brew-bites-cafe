@@ -4,62 +4,46 @@
 
 <div class="container-fluid">
 
-<h1 class="fw-bold mb-4">
+<h1 class="page-title">
 👤 Account Settings
 </h1>
 
 
 @if(session('success'))
-
 <div class="alert alert-success">
-{{ session('success') }}
+{{session('success')}}
 </div>
-
 @endif
 
 
 @if($errors->any())
-
 <div class="alert alert-danger">
-
 <ul class="mb-0">
-
 @foreach($errors->all() as $error)
-
-<li>{{ $error }}</li>
-
+<li>{{$error}}</li>
 @endforeach
-
 </ul>
-
 </div>
-
 @endif
 
 
 
-<div class="row">
+<div class="receipt-card">
 
 
-<div class="col-lg-5 mb-4">
-
-
-<div class="card shadow border-0">
-
-<div class="card-body text-center">
-
-
-<h3 class="fw-bold mb-4">
+<h2 class="text-center fw-bold">
 Profile
-</h3>
+</h2>
 
+
+
+<div class="text-center mt-4">
 
 
 @if($user->profile_image)
 
-<img src="{{ asset('storage/'.$user->profile_image) }}"
+<img src="{{asset('storage/'.$user->profile_image)}}"
 class="profile-image">
-
 
 @else
 
@@ -68,6 +52,10 @@ class="profile-image">
 </div>
 
 @endif
+
+
+</div>
+
 
 
 
@@ -79,21 +67,27 @@ method="POST">
 
 
 
+<label class="form-label fw-bold mt-4">
+Profile Image
+</label>
+
+
 <input type="file"
 id="imageInput"
-class="form-control mt-4"
+class="form-control"
 accept="image/*">
 
 
 
+
+
 <div id="cropArea"
-style="display:none;"
-class="mt-3">
+style="display:none;">
 
 
-<h5>
+<label class="form-label fw-bold mt-4">
 Adjust Image
-</h5>
+</label>
 
 
 <div class="crop-box">
@@ -103,9 +97,10 @@ Adjust Image
 </div>
 
 
+
 <button type="button"
 id="cropButton"
-class="btn btn-warning mt-3">
+class="crop-btn">
 
 Crop Image
 
@@ -118,14 +113,17 @@ Crop Image
 
 
 <img id="finalPreview"
-class="profile-image mt-3"
+class="profile-image mt-4"
 style="display:none;">
+
+
 
 
 
 <input type="hidden"
 name="profile_image"
 id="croppedImage">
+
 
 
 
@@ -139,13 +137,13 @@ Name
 <input type="text"
 name="name"
 class="form-control"
-value="{{ $user->name }}">
+value="{{$user->name}}">
 
 
 
 
 
-<label class="form-label fw-bold mt-3">
+<label class="form-label fw-bold mt-4">
 Email
 </label>
 
@@ -153,103 +151,102 @@ Email
 <input type="email"
 name="email"
 class="form-control"
-value="{{ $user->email }}">
+value="{{$user->email}}">
 
 
 
-<p class="mt-3">
+
+
+<div class="role-box mt-4">
 🛡 Administrator
-</p>
+</div>
 
 
 
-<button class="btn mt-3"
-style="background:#6f4e37;color:white;">
+
+<button class="save-btn mt-4">
 
 Save Profile
 
 </button>
 
 
+
 </form>
 
 
-</div>
-
-</div>
 
 
-</div>
+
+<div class="divider"></div>
 
 
 
 
 
-<div class="col-lg-7">
-
-
-<div class="card shadow border-0">
-
-
-<div class="card-body">
-
-
-<h3 class="fw-bold">
+<h2 class="fw-bold text-center">
 🔒 Change Password
-</h3>
+</h2>
+
+
+
 
 
 <form action="/admin/profile/password"
-method="POST"
-class="mt-4">
-
+method="POST">
 
 @csrf
 @method('PUT')
 
 
-<label>
+
+<label class="form-label mt-4">
 Current Password
 </label>
 
 <input type="password"
 name="current_password"
-class="form-control mb-3">
+class="form-control">
 
 
 
-<label>
+
+
+<label class="form-label mt-3">
 New Password
 </label>
 
 <input type="password"
 name="password"
-class="form-control mb-3">
+class="form-control">
 
 
 
-<label>
+
+
+<label class="form-label mt-3">
 Confirm Password
 </label>
 
 <input type="password"
 name="password_confirmation"
-class="form-control mb-3">
+class="form-control">
 
 
 
-<button class="btn btn-dark">
+
+
+<button class="password-btn mt-4">
 
 Update Password
 
 </button>
 
 
+
 </form>
 
 
-</div>
-
 
 </div>
 
@@ -257,49 +254,110 @@ Update Password
 </div>
 
 
-</div>
-
-
-</div>
 
 
 
 <style>
 
+.page-title{
+
+font-size:48px;
+font-weight:800;
+color:#2b2118;
+margin-bottom:25px;
+
+}
+
+
+
+.receipt-card{
+
+background:white;
+
+max-width:650px;
+
+margin:auto;
+
+padding:35px;
+
+border-radius:25px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+
 .profile-image{
 
 width:180px;
+
 height:180px;
+
 border-radius:50%;
+
 object-fit:cover;
 
+border:6px solid #f3e5d0;
+
 }
+
 
 
 .avatar-placeholder{
 
 width:180px;
+
 height:180px;
+
 border-radius:50%;
+
 background:#6f4e37;
+
 color:white;
+
 font-size:70px;
+
 display:flex;
+
 align-items:center;
+
 justify-content:center;
+
 margin:auto;
 
 }
+
+
+
+.form-control{
+
+height:52px;
+
+border-radius:14px;
+
+}
+
 
 
 .crop-box{
 
-width:350px;
-height:350px;
-margin:auto;
+width:100%;
+
+max-width:350px;
+
+height:250px;
+
+margin:20px auto;
+
 overflow:hidden;
 
+border-radius:15px;
+
+background:#eee;
+
 }
+
 
 
 .crop-box img{
@@ -308,7 +366,102 @@ max-width:100%;
 
 }
 
+
+
+.crop-btn,
+.save-btn,
+.password-btn{
+
+width:100%;
+
+border:none;
+
+padding:13px;
+
+border-radius:20px;
+
+font-weight:700;
+
+color:white;
+
+background:#6f4e37;
+
+}
+
+
+
+.crop-btn:hover,
+.save-btn:hover{
+
+background:#4b2e1f;
+
+}
+
+
+
+.password-btn{
+
+background:#1f2937;
+
+}
+
+
+
+.role-box{
+
+background:#faf5ef;
+
+padding:14px;
+
+border-radius:15px;
+
+text-align:center;
+
+font-weight:700;
+
+}
+
+
+
+.divider{
+
+border-top:2px dashed #ddd;
+
+margin:35px 0;
+
+}
+
+
+
+@media(max-width:768px){
+
+.page-title{
+
+font-size:30px;
+
+}
+
+
+.receipt-card{
+
+padding:20px;
+
+}
+
+
+.profile-image,
+.avatar-placeholder{
+
+width:130px;
+
+height:130px;
+
+}
+
+}
+
 </style>
+
 
 
 
@@ -318,28 +471,18 @@ max-width:100%;
 let cropper;
 
 
-const imageInput =
-document.getElementById('imageInput');
+const imageInput=document.getElementById('imageInput');
 
+const imagePreview=document.getElementById('imagePreview');
 
-const imagePreview =
-document.getElementById('imagePreview');
+const cropArea=document.getElementById('cropArea');
 
+const cropButton=document.getElementById('cropButton');
 
-const cropArea =
-document.getElementById('cropArea');
+const croppedImage=document.getElementById('croppedImage');
 
+const finalPreview=document.getElementById('finalPreview');
 
-const cropButton =
-document.getElementById('cropButton');
-
-
-const croppedImage =
-document.getElementById('croppedImage');
-
-
-const finalPreview =
-document.getElementById('finalPreview');
 
 
 
@@ -352,9 +495,7 @@ const file=e.target.files[0];
 if(file){
 
 
-imagePreview.src =
-URL.createObjectURL(file);
-
+imagePreview.src=URL.createObjectURL(file);
 
 cropArea.style.display='block';
 
@@ -368,7 +509,7 @@ cropper.destroy();
 
 
 
-cropper = new Cropper(imagePreview,{
+cropper=new Cropper(imagePreview,{
 
 aspectRatio:1,
 
@@ -383,15 +524,17 @@ autoCropArea:1
 
 }
 
+
 });
+
+
 
 
 
 cropButton.addEventListener('click',function(){
 
 
-const canvas =
-cropper.getCroppedCanvas({
+const canvas=cropper.getCroppedCanvas({
 
 width:500,
 
@@ -400,10 +543,7 @@ height:500
 });
 
 
-
-const imageData =
-canvas.toDataURL('image/jpeg');
-
+const imageData=canvas.toDataURL('image/jpeg');
 
 
 croppedImage.value=imageData;

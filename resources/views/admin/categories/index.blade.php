@@ -5,7 +5,7 @@
 <div class="container-fluid">
 
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="category-header mb-4">
 
 
 <div>
@@ -14,15 +14,16 @@
 📂 Category Management
 </h1>
 
-<p class="text-muted">
+<p class="text-muted mb-0">
 Organize your café products.
 </p>
 
 </div>
 
 
+
 <a href="/admin/categories/create"
-class="btn btn-dark">
+class="add-btn">
 
 + Add Category
 
@@ -33,59 +34,52 @@ class="btn btn-dark">
 
 
 
-@if(session('error'))
-
-<div class="alert alert-danger">
-
-{{ session('error') }}
-
-</div>
-
-@endif
 
 
-
-<div class="row">
-
+<div class="row g-4">
 
 
 @foreach($categories as $category)
 
 
-
-<div class="col-lg-4 col-md-6 mb-4">
-
-
-<div class="card shadow border-0 text-center h-100">
+<div class="col-lg-4 col-md-6">
 
 
-<div class="card-body p-4">
+<div class="category-card">
 
 
-<div style="font-size:55px">
 
-{{ $category->icon }}
+<div class="category-icon">
+
+{{$category->icon}}
 
 </div>
 
 
-<h2 class="fw-bold mt-3">
-
-{{ $category->name }}
-
-</h2>
 
 
-<p class="text-muted">
+<h3>
 
-{{ $category->products_count }} Products
+{{$category->name}}
+
+</h3>
+
+
+
+
+<p>
+
+{{$category->products_count}}
+Products
 
 </p>
 
 
 
-<a href="/admin/categories/{{ $category->id }}/products"
-class="btn btn-dark mb-2">
+
+
+<a href="/admin/categories/{{$category->id}}/products"
+class="view-btn">
 
 View Products
 
@@ -93,11 +87,13 @@ View Products
 
 
 
-<div>
 
 
-<a href="/admin/categories/{{ $category->id }}/edit"
-class="btn btn-warning">
+<div class="actions">
+
+
+<a href="/admin/categories/{{$category->id}}/edit"
+class="edit-btn">
 
 Edit
 
@@ -105,107 +101,15 @@ Edit
 
 
 
-<button type="button"
-class="btn btn-danger"
-data-bs-toggle="modal"
-data-bs-target="#deleteModal{{ $category->id }}">
-
-Delete
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<!-- Delete Modal -->
-
-<div class="modal fade"
-id="deleteModal{{ $category->id }}"
-tabindex="-1">
-
-
-<div class="modal-dialog modal-dialog-centered">
-
-
-<div class="modal-content">
-
-
-<div class="modal-header">
-
-<h5 class="modal-title">
-
-Delete Category
-
-</h5>
-
-
-<button type="button"
-class="btn-close"
-data-bs-dismiss="modal">
-
-</button>
-
-
-</div>
-
-
-
-<div class="modal-body">
-
-
-Are you sure you want to delete:
-
-
-<strong>
-{{ $category->name }}
-</strong>?
-
-
-<br>
-
-
-This action cannot be undone.
-
-
-</div>
-
-
-
-<div class="modal-footer">
-
-
-<button type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
-
-Cancel
-
-</button>
-
-
-
-
-<form action="/admin/categories/{{ $category->id }}"
+<form action="/admin/categories/{{$category->id}}"
 method="POST">
 
 @csrf
 @method('DELETE')
 
 
-<button class="btn btn-danger">
+<button class="delete-btn"
+onclick="return confirm('Delete this category?')">
 
 Delete
 
@@ -218,7 +122,6 @@ Delete
 </div>
 
 
-</div>
 
 
 </div>
@@ -234,5 +137,207 @@ Delete
 
 
 </div>
+
+
+
+
+
+<style>
+
+
+.category-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:20px;
+
+}
+
+
+
+.add-btn{
+
+background:#1f2937;
+
+color:white;
+
+padding:12px 25px;
+
+border-radius:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+
+
+
+.category-card{
+
+background:white;
+
+border-radius:22px;
+
+padding:35px 25px;
+
+text-align:center;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+height:100%;
+
+}
+
+
+
+.category-icon{
+
+font-size:60px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.category-card h3{
+
+font-size:24px;
+
+font-weight:800;
+
+}
+
+
+
+.category-card p{
+
+color:#6b7280;
+
+}
+
+
+
+.view-btn{
+
+display:inline-block;
+
+background:#1f2937;
+
+color:white;
+
+padding:10px 20px;
+
+border-radius:12px;
+
+font-weight:700;
+
+text-decoration:none;
+
+margin-bottom:15px;
+
+}
+
+
+
+.actions{
+
+display:flex;
+
+justify-content:center;
+
+gap:10px;
+
+}
+
+
+
+.edit-btn,
+.delete-btn{
+
+padding:10px 20px;
+
+border-radius:12px;
+
+font-weight:700;
+
+border:none;
+
+cursor:pointer;
+
+text-decoration:none;
+
+}
+
+
+
+.edit-btn{
+
+background:#fbbf24;
+
+color:#1f2937;
+
+}
+
+
+
+.delete-btn{
+
+background:#dc3545;
+
+color:white;
+
+}
+
+
+
+@media(max-width:768px){
+
+
+.category-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+
+
+.add-btn{
+
+width:100%;
+
+text-align:center;
+
+}
+
+
+
+.category-card{
+
+padding:25px 20px;
+
+}
+
+
+
+.category-icon{
+
+font-size:50px;
+
+}
+
+
+}
+
+</style>
+
 
 @endsection

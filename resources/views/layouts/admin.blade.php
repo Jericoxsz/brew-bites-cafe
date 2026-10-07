@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Brew & Bites Admin</title>
+<title>Brew & Bites Admin Panel</title>
 
 @vite(['resources/css/app.css','resources/js/app.js'])
-
 
 <style>
 
@@ -19,8 +17,30 @@ body{
 }
 
 
-.admin-wrapper{
-    min-height:100vh;
+/* MOBILE HEADER */
+
+.mobile-header{
+    display:none;
+    height:60px;
+    background:#4b2e1f;
+    color:white;
+    padding:15px;
+    align-items:center;
+    gap:15px;
+    font-size:20px;
+    font-weight:700;
+    position:sticky;
+    top:0;
+    z-index:2000;
+    box-sizing:border-box;
+}
+
+.mobile-header button{
+    background:white;
+    border:none;
+    border-radius:8px;
+    padding:5px 12px;
+    font-size:22px;
 }
 
 
@@ -52,54 +72,6 @@ body{
 }
 
 
-
-/* MOBILE HEADER */
-
-.mobile-header{
-
-    display:none;
-
-    background:#4b2e1f;
-
-    color:white;
-
-    padding:15px;
-
-    align-items:center;
-
-    gap:15px;
-
-    font-size:20px;
-
-    font-weight:700;
-
-    position:sticky;
-
-    top:0;
-
-    z-index:2000;
-
-}
-
-
-.mobile-header button{
-
-    background:white;
-
-    border:none;
-
-    border-radius:8px;
-
-    padding:7px 12px;
-
-    font-size:22px;
-
-}
-
-
-
-/* MAIN */
-
 .admin-main{
 
     margin-left:290px;
@@ -109,20 +81,16 @@ body{
     min-height:100vh;
 
     display:flex;
-
     flex-direction:column;
-
 }
 
 
 .admin-content{
 
     flex:1;
-
     padding:28px;
 
 }
-
 
 
 /* PROFILE */
@@ -137,24 +105,12 @@ body{
 
     text-align:center;
 
-    margin:20px 0;
+    margin:15px 0;
 
 }
 
 
-.profile-box img{
-
-    width:70px;
-
-    height:70px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-}
-
-
+.profile-box img,
 .profile-avatar{
 
     width:70px;
@@ -162,6 +118,18 @@ body{
     height:70px;
 
     border-radius:50%;
+
+}
+
+
+.profile-box img{
+
+    object-fit:cover;
+
+}
+
+
+.profile-avatar{
 
     background:white;
 
@@ -171,9 +139,9 @@ body{
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
+
+    justify-content:center;
 
     margin:auto;
 
@@ -207,8 +175,16 @@ body{
 
     overflow-y:auto;
 
+    scrollbar-width:none;
+
 }
 
+
+.sidebar-menu::-webkit-scrollbar{
+
+    display:none;
+
+}
 
 
 .sidebar-link{
@@ -219,9 +195,9 @@ body{
 
     gap:12px;
 
-    padding:14px 16px;
+    padding:12px 16px;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
     border-radius:14px;
 
@@ -251,7 +227,9 @@ body{
 
 .logout-area{
 
-    margin-top:auto;
+    flex-shrink:0;
+
+    margin-top:8px;
 
 }
 
@@ -260,7 +238,7 @@ body{
 
     width:100%;
 
-    padding:12px;
+    padding:10px;
 
     border-radius:14px;
 
@@ -313,26 +291,28 @@ body{
 
 /* MOBILE */
 
-@@media(max-width:768px){
+@media(max-width:768px){
+
 
 .mobile-header{
 
     display:flex;
 
-    position:sticky;
-
-    top:0;
-
-    z-index:2000;
-
 }
+
 
 
 .admin-sidebar{
 
+    width:270px;
+
+    height:calc(100vh - 60px);
+
+    top:60px;
+
     transform:translateX(-100%);
 
-    width:260px;
+    overflow:hidden;
 
 }
 
@@ -355,7 +335,6 @@ body{
 }
 
 
-
 .admin-content{
 
     padding:15px;
@@ -364,11 +343,72 @@ body{
 
 
 
+/* smaller profile */
+
+.profile-box{
+
+    padding:8px;
+
+    margin:8px 0;
+
+}
+
+
+.profile-box img,
+.profile-avatar{
+
+    width:55px;
+
+    height:55px;
+
+}
+
+
+.profile-name{
+
+    font-size:14px;
+
+}
+
+
+.profile-email{
+
+    font-size:11px;
+
+}
+
+
+
+/* menu smaller */
+
+.sidebar-menu{
+
+    max-height:calc(100vh - 500px);
+
+    overflow-y:auto;
+
+}
+
+
+.sidebar-link{
+
+    padding:10px 14px;
+
+    margin-bottom:5px;
+
+}
+
+
+
+/* overlay */
+
 .sidebar-overlay{
 
     position:fixed;
 
     inset:0;
+
+    top:60px;
 
     background:rgba(0,0,0,.45);
 
@@ -377,13 +417,25 @@ body{
 }
 
 
-
 .sidebar-overlay.show{
 
     display:block;
 
 }
 
+
+
+/* logout closer */
+
+.logout-area{
+
+    background:#603a24;
+
+    padding-top:5px;
+
+    padding-bottom:5px;
+
+}
 
 }
 
@@ -412,7 +464,6 @@ body{
 <div class="admin-wrapper">
 
 
-
 <aside class="admin-sidebar" id="adminSidebar">
 
 
@@ -433,7 +484,6 @@ ADMIN PANEL
 @if(Auth::user()->profile_image)
 
 <img src="{{asset('storage/'.Auth::user()->profile_image)}}">
-
 
 @else
 
@@ -507,22 +557,17 @@ class="sidebar-link {{request()->is('admin/profile')?'active':''}}">
 
 <div class="logout-area">
 
-
 <hr>
-
 
 <form method="POST" action="/logout">
 
 @csrf
 
 <button class="logout-btn">
-
 Logout
-
 </button>
 
 </form>
-
 
 </div>
 

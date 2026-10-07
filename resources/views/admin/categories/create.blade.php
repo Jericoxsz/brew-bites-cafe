@@ -8,13 +8,33 @@
 📂 Add Category
 </h1>
 
+
+@if($errors->any())
+
+<div class="alert alert-danger">
+
+<ul class="mb-0">
+
+@foreach($errors->all() as $error)
+
+<li>{{ $error }}</li>
+
+@endforeach
+
+</ul>
+
+</div>
+
+@endif
+
+
+
 <div class="card shadow border-0">
 
 <div class="card-body p-4">
 
 
-<form action="/admin/categories"
-method="POST">
+<form action="/admin/categories" method="POST">
 
 @csrf
 
@@ -25,12 +45,16 @@ method="POST">
 Category Name
 </label>
 
+
 <input type="text"
 name="name"
 class="form-control"
+value="{{ old('name') }}"
 placeholder="Example: Coffee">
 
+
 </div>
+
 
 
 <div class="mb-4">
@@ -81,6 +105,7 @@ $icons = [
 @endphp
 
 
+
 @foreach($icons as $icon)
 
 <div class="col-2">
@@ -90,7 +115,8 @@ $icons = [
 name="icon"
 value="{{ $icon }}"
 id="icon{{ $loop->index }}"
-class="d-none icon-radio">
+class="d-none icon-radio"
+{{ old('icon') == $icon ? 'checked' : '' }}>
 
 
 <label for="icon{{ $loop->index }}"
@@ -108,8 +134,8 @@ class="icon-box">
 
 </div>
 
-
 </div>
+
 
 
 <button class="btn"
@@ -131,6 +157,7 @@ Save Category
 </div>
 
 
+
 <style>
 
 .icon-box{
@@ -147,6 +174,7 @@ background:#f8f1e7;
 transition:.2s;
 
 }
+
 
 .icon-box:hover{
 
