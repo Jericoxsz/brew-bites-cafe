@@ -24,11 +24,11 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if($user->role === 'admin'){
             return redirect('/admin/dashboard');
         }
 
-        return redirect('/products');
+        return redirect('/');
     }
 
     public function destroy(Request $request): RedirectResponse
