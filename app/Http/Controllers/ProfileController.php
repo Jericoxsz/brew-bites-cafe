@@ -14,6 +14,7 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
+
     public function update(Request $request)
     {
         $request->validate([
@@ -22,43 +23,109 @@ class ProfileController extends Controller
             'cropped_image'=>'nullable'
         ]);
 
-        $user=Auth::user();
+
+        $user = Auth::user();
+
+
 
         $user->update([
             'name'=>$request->name,
             'email'=>$request->email
         ]);
 
-        if($request->cropped_image){
 
-            $image=str_replace('data:image/jpeg;base64,','',$request->cropped_image);
-            $image=str_replace(' ','+',$image);
 
-            $filename='profile_'.time().'.jpg';
 
-            Storage::disk('public')->put(
-                'profiles/'.$filename,
-                base64_decode($image)
+
+        if($request->filled('cropped_image')){
+
+
+            $image = $request->cropped_image;
+
+
+
+            $image = str_replace(
+                'data:image/jpeg;base64,',
+                '',
+                $image
             );
 
+
+            $image = str_replace(
+                ' ',
+                '+',
+                $image
+            );
+
+
+
+            $filename = 'profile_'.time().'.jpg';
+
+
+
+            Storage::disk('public')->put(
+
+                'profiles/'.$filename,
+
+                base64_decode($image)
+
+            );
+
+
+
             $user->update([
+
                 'profile_image'=>'profiles/'.$filename
+
             ]);
+
         }
 
-        return back()->with('status','Profile updated successfully.');
+
+
+
+        return back()->with(
+
+            'status',
+
+            'Profile updated successfully.'
+
+        );
+
     }
+
+
+
+
 
     public function password(Request $request)
     {
+
         $request->validate([
+
             'password'=>'required|min:8|confirmed'
+
         ]);
+
+
 
         Auth::user()->update([
-            'password'=>Hash::make($request->password)
+
+            'password'=>Hash::make(
+                $request->password
+            )
+
         ]);
 
-        return back()->with('status','Password updated successfully.');
+
+
+        return back()->with(
+
+            'status',
+
+            'Password updated successfully.'
+
+        );
+
     }
 }

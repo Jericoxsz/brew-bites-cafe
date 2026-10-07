@@ -17,36 +17,68 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController as CustomerOrderController;
 
 
+
 Route::get('/', [HomeController::class, 'index']);
 
 
-// Default dashboard redirect
-Route::get('/dashboard', function () {
+
+// Dashboard redirect
+
+Route::get('/dashboard', function(){
 
     return redirect('/admin/dashboard');
 
-})->middleware(['auth','verified'])
+})
+->middleware(['auth','verified'])
 ->name('dashboard');
 
 
 
-// Customer Profile (Breeze)
-Route::middleware('auth')->group(function () {
+require __DIR__.'/auth.php';
 
-    Route::get('/profile', [ProfileController::class,'edit'])
-        ->name('profile.edit');
 
-    Route::patch('/profile', [ProfileController::class,'update'])
-        ->name('profile.update');
 
-    Route::delete('/profile', [ProfileController::class,'destroy'])
-        ->name('profile.destroy');
+
+
+// =========================
+// CUSTOMER PROFILE
+// =========================
+
+
+Route::middleware('auth')->group(function(){
+
+
+    Route::get('/profile',
+        [ProfileController::class,'edit']
+    )
+    ->name('profile.edit');
+
+
+
+    Route::patch('/profile',
+        [ProfileController::class,'update']
+    )
+    ->name('profile.update');
+
+
+
+    Route::post('/password',
+        [ProfileController::class,'password']
+    );
+
+
+
+    Route::delete('/profile',
+        [ProfileController::class,'destroy']
+    )
+    ->name('profile.destroy');
+
 
 });
 
 
 
-require __DIR__.'/auth.php';
+
 
 
 
@@ -101,16 +133,20 @@ Route::get('/admin/inventory',
 
 
 
+
 // Admin Profile
+
 
 Route::get('/admin/profile',
 [AdminProfileController::class,'edit'])
 ->middleware('admin');
 
 
+
 Route::put('/admin/profile',
 [AdminProfileController::class,'update'])
 ->middleware('admin');
+
 
 
 Route::put('/admin/profile/password',
@@ -121,8 +157,11 @@ Route::put('/admin/profile/password',
 
 
 
+
+
+
 // =========================
-// CUSTOMER ROUTES
+// CUSTOMER PRODUCTS
 // =========================
 
 
@@ -136,19 +175,33 @@ Route::get('/products/{product}',
 
 
 
+
+
+
+
+
+// =========================
+// CART & ORDERS
+// =========================
+
+
 Route::middleware('auth')->group(function(){
+
 
 
     Route::post('/cart/add/{product}',
     [CartController::class,'add']);
 
 
+
     Route::get('/cart',
     [CartController::class,'index']);
 
 
+
     Route::put('/cart/update/{item}',
     [CartController::class,'update']);
+
 
 
     Route::delete('/cart/remove/{item}',
@@ -156,36 +209,35 @@ Route::middleware('auth')->group(function(){
 
 
 
+
+
     Route::post('/checkout',
     [CustomerOrderController::class,'checkout']);
+
 
 
     Route::get('/order-success/{order}',
     [CustomerOrderController::class,'success']);
 
 
+
     Route::get('/orders',
     [CustomerOrderController::class,'index']);
 
+
 });
+
+
+
+
+
 
 Route::get('/checkout',
 [CustomerOrderController::class,'showCheckout'])
 ->middleware('auth');
 
 
+
 Route::post('/checkout',
 [CustomerOrderController::class,'checkout'])
 ->middleware('auth');
-
-Route::middleware('auth')->group(function(){
-
-Route::get('/profile',[ProfileController::class,'edit'])
-->name('profile.edit');
-
-Route::patch('/profile',[ProfileController::class,'update'])
-->name('profile.update');
-
-Route::post('/password',[ProfileController::class,'password']);
-
-});
