@@ -73,6 +73,12 @@ body{
 
     font-weight:700;
 
+    position:sticky;
+
+    top:0;
+
+    z-index:2000;
+
 }
 
 
@@ -307,15 +313,19 @@ body{
 
 /* MOBILE */
 
-@media(max-width:768px){
-
+@@media(max-width:768px){
 
 .mobile-header{
 
     display:flex;
 
-}
+    position:sticky;
 
+    top:0;
+
+    z-index:2000;
+
+}
 
 
 .admin-sidebar{
