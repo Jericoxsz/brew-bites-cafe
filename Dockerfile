@@ -25,6 +25,8 @@ RUN npm install && npm run build
 
 RUN php artisan migrate --force
 
+RUN php artisan storage:link || true
+
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
