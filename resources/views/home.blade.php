@@ -5,7 +5,7 @@
 <div class="container">
 <div class="row align-items-center">
 <div class="col-lg-12">
-<h1 class="hero-title">☕ Brew & Bites Café</h1>
+<h1 class="hero-title">☕ Cofekko cafe</h1>
 <h2 class="hero-subtitle">Your daily coffee, pastries, and comfort meals.</h2>
 <p class="lead mt-3">Freshly brewed coffee. Fresh pastries. Made with love everyday.</p>
 

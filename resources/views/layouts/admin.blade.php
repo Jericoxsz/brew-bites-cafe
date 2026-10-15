@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Brew & Bites Admin Panel</title>
+<title>Cofekko Cafe Admin Panel</title>
 
 @vite(['resources/css/app.css','resources/js/app.js'])
 
@@ -454,7 +454,7 @@ body{
 </button>
 
 <span>
-☕ Brew & Bites Admin
+☕ Cofekko Cafe
 </span>
 
 </div>
@@ -468,7 +468,7 @@ body{
 
 
 <h2 class="fw-bold">
-☕ Brew & Bites
+☕ Cofekko Cafe
 </h2>
 
 
@@ -593,7 +593,7 @@ Logout
 
 <footer class="admin-footer">
 
-Brew & Bites Admin Panel © 2026
+Cofekko Cafe Admin Panel © 2026
 
 </footer>
 

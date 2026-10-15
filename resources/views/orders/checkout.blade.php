@@ -9,7 +9,7 @@
 <div class="receipt">
 
 <div class="receipt-header">
-<h2>Brew & Bites Café</h2>
+<h2>Cofekko Cafe</h2>
 <p>Order Receipt</p>
 </div>
 

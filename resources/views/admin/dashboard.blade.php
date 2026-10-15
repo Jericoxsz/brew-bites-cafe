@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
 
-<h1 class="fw-bold mb-4">☕ Brew & Bites Dashboard</h1>
+<h1 class="fw-bold mb-4">☕ Cofekko Cafe Dashboard</h1>
 
 <div class="row g-4 mb-4">
 

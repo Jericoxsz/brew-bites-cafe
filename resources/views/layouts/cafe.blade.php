@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Brew & Bites Café</title>
+<title>Cofekko Cafe</title>
 
 @vite(['resources/css/app.css','resources/js/app.js'])
 
@@ -324,7 +324,7 @@ body{
 <a href="/" 
 class="brand">
 
-☕ Brew & Bites
+☕ Cofekko Cafe
 
 </a>
 
@@ -474,7 +474,7 @@ Register
 
 
 <h3>
-☕ Brew & Bites Café
+☕ Cofekko Cafe
 </h3>
 
 
@@ -484,7 +484,7 @@ Fresh coffee. Fresh pastries. Made with love.
 
 
 <p>
-© 2026 Brew & Bites Café
+© 2026 Cofekko Cafe
 </p>
 
 
